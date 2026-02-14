@@ -155,7 +155,7 @@ export default function App() {
   const canPlay = photos.length >= MIN_CARDS_TO_PLAY;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-red-50 to-rose-100">
+    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-red-50 to-rose-100 overflow-x-hidden">
       {/* Floating hearts background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <Heart className="absolute top-[10%] left-[5%] size-12 text-pink-200 fill-current opacity-40 animate-float" />
@@ -193,23 +193,23 @@ export default function App() {
         {/* Mode Toggle — only show in dashboard if there are enough cards */}
         {/* Mode Toggle — show when there are photos */}
         {photos.length > 0 && (
-          <div className="flex justify-center mb-8">
-            <div className="bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-lg flex items-center gap-1">
+          <div className="flex justify-center mb-8 px-2">
+            <div className="bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-lg flex items-center gap-1 overflow-x-auto max-w-full no-scrollbar">
               <button
                 onClick={() => setMode("dashboard")}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all text-sm font-medium ${mode === "dashboard"
+                className={`flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all text-xs sm:text-sm font-medium whitespace-nowrap ${mode === "dashboard"
                   ? "bg-gradient-to-r from-pink-400 to-red-400 text-white shadow-md"
                   : "text-gray-600 hover:text-pink-500"
                   }`}
               >
-                <ImageIcon className="size-4" />
+                <ImageIcon className="size-4 shrink-0" />
                 Photos
               </button>
               <button
                 onClick={() => {
                   if (canPlay) setMode("game");
                 }}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all text-sm font-medium ${!canPlay
+                className={`flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all text-xs sm:text-sm font-medium whitespace-nowrap ${!canPlay
                   ? "text-gray-300 cursor-not-allowed"
                   : mode === "game"
                     ? "bg-gradient-to-r from-pink-400 to-red-400 text-white shadow-md"
@@ -221,7 +221,7 @@ export default function App() {
                     : "Play Memory Game"
                 }
               >
-                <Gamepad2 className="size-4" />
+                <Gamepad2 className="size-4 shrink-0" />
                 Memory Game
                 {!canPlay && (
                   <span className="text-[10px] bg-pink-100 text-pink-500 px-2 py-0.5 rounded-full">
@@ -231,19 +231,19 @@ export default function App() {
               </button>
               <button
                 onClick={() => setMode("jigsaw-select")}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all text-sm font-medium ${mode === "jigsaw-select" || mode === "jigsaw"
+                className={`flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all text-xs sm:text-sm font-medium whitespace-nowrap ${mode === "jigsaw-select" || mode === "jigsaw"
                     ? "bg-gradient-to-r from-pink-400 to-red-400 text-white shadow-md"
                     : "text-gray-600 hover:text-pink-500"
                   }`}
               >
-                <Puzzle className="size-4" />
+                <Puzzle className="size-4 shrink-0" />
                 Ghép Hình
               </button>
               <button
                 onClick={() => {
                   if (canBreakout) setMode("breakout-select");
                 }}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all text-sm font-medium ${!canBreakout
+                className={`flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all text-xs sm:text-sm font-medium whitespace-nowrap ${!canBreakout
                     ? "text-gray-300 cursor-not-allowed"
                     : mode === "breakout-select" || mode === "breakout"
                       ? "bg-gradient-to-r from-pink-400 to-red-400 text-white shadow-md"
@@ -255,7 +255,7 @@ export default function App() {
                     : "Play Breakout"
                 }
               >
-                <Zap className="size-4" />
+                <Zap className="size-4 shrink-0" />
                 Breakout
                 {!canBreakout && (
                   <span className="text-[10px] bg-pink-100 text-pink-500 px-2 py-0.5 rounded-full">
@@ -479,7 +479,7 @@ export default function App() {
 
             {/* Photos Grid */}
             {photos.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-12 max-w-7xl mx-auto px-2 sm:px-0">
                 {photos.map((photo) => (
                   <PolaroidCard
                     key={photo.id}

@@ -507,8 +507,8 @@ export function BreakoutGame({ ballPhoto, brickPhoto, onBack }: BreakoutGameProp
                             <Heart
                                 key={i}
                                 className={`size-4 ${i < uiLives
-                                        ? "text-red-500 fill-current"
-                                        : "text-gray-300"
+                                    ? "text-red-500 fill-current"
+                                    : "text-gray-300"
                                     }`}
                             />
                         ))}

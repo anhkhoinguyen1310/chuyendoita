@@ -56,3 +56,13 @@
 .rotate-y-180 {
   transform: rotateY(180deg);
 }
+
+/* Hide scrollbar but allow scrolling */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

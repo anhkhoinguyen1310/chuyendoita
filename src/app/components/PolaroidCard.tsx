@@ -25,7 +25,7 @@ export function PolaroidCard({ image, caption, onDelete, onCaptionChange }: Pola
         {/* Delete Button */}
         <button
           onClick={onDelete}
-          className="absolute -top-2 -right-2 bg-red-400 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-red-500"
+          className="absolute -top-2 -right-2 bg-red-400 text-white rounded-full p-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity z-10 hover:bg-red-500"
         >
           <X className="size-4" />
         </button>
@@ -37,16 +37,15 @@ export function PolaroidCard({ image, caption, onDelete, onCaptionChange }: Pola
             alt={caption}
             className="w-full h-full object-cover"
           />
-          
+
           {/* Heart Button Overlay */}
           <button
             onClick={() => setIsLiked(!isLiked)}
             className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors"
           >
             <Heart
-              className={`size-5 transition-colors ${
-                isLiked ? "fill-red-500 text-red-500" : "text-gray-600"
-              }`}
+              className={`size-5 transition-colors ${isLiked ? "fill-red-500 text-red-500" : "text-gray-600"
+                }`}
             />
           </button>
         </div>
@@ -95,11 +94,11 @@ export function PolaroidCard({ image, caption, onDelete, onCaptionChange }: Pola
         </div>
       </div>
 
-      {/* Decorative hearts */}
-      <div className="absolute -top-6 -left-6 text-pink-300 opacity-0 group-hover:opacity-100 transition-opacity animate-pulse">
+      {/* Decorative hearts — hidden on mobile to prevent overflow */}
+      <div className="absolute -top-6 -left-6 text-pink-300 opacity-0 group-hover:opacity-100 transition-opacity animate-pulse hidden sm:block">
         <Heart className="size-8 fill-current" />
       </div>
-      <div className="absolute -bottom-6 -right-6 text-red-300 opacity-0 group-hover:opacity-100 transition-opacity animate-pulse delay-100">
+      <div className="absolute -bottom-6 -right-6 text-red-300 opacity-0 group-hover:opacity-100 transition-opacity animate-pulse delay-100 hidden sm:block">
         <Heart className="size-6 fill-current" />
       </div>
     </div>
