@@ -4,6 +4,7 @@ import { PolaroidCard } from "./components/PolaroidCard";
 import { MemoryGame } from "./components/MemoryGame";
 import { JigsawPuzzle } from "./components/JigsawPuzzle";
 import { BreakoutGame } from "./components/BreakoutGame";
+import { CountdownClock } from "./components/CountdownClock";
 
 const MIN_CARDS_TO_PLAY = 4;
 
@@ -188,6 +189,9 @@ export default function App() {
                       ? "Phá gạch điiiii! 💥💕"
                       : "Tìm Đỉm Chungggg 💕"}
           </p>
+
+          {/* Countdown Clock */}
+          <CountdownClock />
         </div>
 
         {/* Mode Toggle — only show in dashboard if there are enough cards */}
@@ -232,8 +236,8 @@ export default function App() {
               <button
                 onClick={() => setMode("jigsaw-select")}
                 className={`flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all text-xs sm:text-sm font-medium whitespace-nowrap ${mode === "jigsaw-select" || mode === "jigsaw"
-                    ? "bg-gradient-to-r from-pink-400 to-red-400 text-white shadow-md"
-                    : "text-gray-600 hover:text-pink-500"
+                  ? "bg-gradient-to-r from-pink-400 to-red-400 text-white shadow-md"
+                  : "text-gray-600 hover:text-pink-500"
                   }`}
               >
                 <Puzzle className="size-4 shrink-0" />
@@ -244,10 +248,10 @@ export default function App() {
                   if (canBreakout) setMode("breakout-select");
                 }}
                 className={`flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all text-xs sm:text-sm font-medium whitespace-nowrap ${!canBreakout
-                    ? "text-gray-300 cursor-not-allowed"
-                    : mode === "breakout-select" || mode === "breakout"
-                      ? "bg-gradient-to-r from-pink-400 to-red-400 text-white shadow-md"
-                      : "text-gray-600 hover:text-pink-500"
+                  ? "text-gray-300 cursor-not-allowed"
+                  : mode === "breakout-select" || mode === "breakout"
+                    ? "bg-gradient-to-r from-pink-400 to-red-400 text-white shadow-md"
+                    : "text-gray-600 hover:text-pink-500"
                   }`}
                 title={
                   !canBreakout
