@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { Heart, Upload, Camera, Gamepad2, ImageIcon, Puzzle, Zap } from "lucide-react";
+import { Heart, Upload, Camera, Gamepad2, ImageIcon, Puzzle, Zap, Mail } from "lucide-react";
 import { PolaroidCard } from "./components/PolaroidCard";
 import { MemoryGame } from "./components/MemoryGame";
 import { JigsawPuzzle } from "./components/JigsawPuzzle";
 import { BreakoutGame } from "./components/BreakoutGame";
 import { CountdownClock } from "./components/CountdownClock";
+import { LetterMailbox } from "./components/LetterMailbox";
+
+interface Letter {
+  id: string;
+  image: string;
+  receivedAt: string;
+}
 
 const MIN_CARDS_TO_PLAY = 4;
 
@@ -113,12 +120,45 @@ function BreakoutPhotoSelect({
 
 export default function App() {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [mode, setMode] = useState<"dashboard" | "game" | "jigsaw-select" | "jigsaw" | "breakout-select" | "breakout">("dashboard");
+  const [letters, setLetters] = useState<Letter[]>([]);
+  const [mode, setMode] = useState<"dashboard" | "game" | "jigsaw-select" | "jigsaw" | "breakout-select" | "breakout" | "mailbox">("dashboard");
   const [jigsawPhotoId, setJigsawPhotoId] = useState<string | null>(null);
   const [breakoutBallPhotoId, setBreakoutBallPhotoId] = useState<string | null>(null);
   const [breakoutBrickPhotoId, setBreakoutBrickPhotoId] = useState<string | null>(null);
 
   const canBreakout = photos.length >= 2;
+
+  const handleLetterUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    Array.from(files).forEach((file) => {
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const newLetter: Letter = {
+            id: Date.now().toString() + Math.random(),
+            image: e.target?.result as string,
+            receivedAt: new Date().toLocaleDateString("vi-VN", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            }),
+          };
+          setLetters((prev) => [...prev, newLetter]);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    event.target.value = "";
+    // Navigate to mailbox after uploading a letter
+    setMode("mailbox");
+  };
+
+  const handleDeleteLetter = (id: string) => {
+    setLetters((prev) => prev.filter((l) => l.id !== id));
+  };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -187,7 +227,9 @@ export default function App() {
                     ? "Chọn ảnh để chơi Breakout nàooo! 💥💕"
                     : mode === "breakout"
                       ? "Phá gạch điiiii! 💥💕"
-                      : "Tìm Đỉm Chungggg 💕"}
+                      : mode === "mailbox"
+                        ? "Hộp thư tình yêu 💌💕"
+                        : "Tìm Đỉm Chungggg 💕"}
           </p>
 
           {/* Countdown Clock */}
@@ -195,8 +237,8 @@ export default function App() {
         </div>
 
         {/* Mode Toggle — only show in dashboard if there are enough cards */}
-        {/* Mode Toggle — show when there are photos */}
-        {photos.length > 0 && (
+        {/* Mode Toggle — show when there are photos or letters */}
+        {(photos.length > 0 || letters.length > 0) && (
           <div className="flex justify-center mb-8 px-2">
             <div className="bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-lg flex items-center gap-1 overflow-x-auto max-w-full no-scrollbar">
               <button
@@ -267,12 +309,35 @@ export default function App() {
                   </span>
                 )}
               </button>
+              <button
+                onClick={() => setMode("mailbox")}
+                className={`flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all text-xs sm:text-sm font-medium whitespace-nowrap ${
+                  mode === "mailbox"
+                    ? "bg-gradient-to-r from-pink-400 to-red-400 text-white shadow-md"
+                    : "text-gray-600 hover:text-pink-500"
+                }`}
+              >
+                <Mail className="size-4 shrink-0" />
+                Hộp Thư
+                {letters.length > 0 && (
+                  <span className="text-[10px] bg-pink-100 text-pink-500 px-2 py-0.5 rounded-full">
+                    {letters.length}
+                  </span>
+                )}
+              </button>
             </div>
           </div>
         )}
 
-        {/* ── GAME MODE ── */}
-        {mode === "game" ? (
+        {/* ── MAILBOX MODE ── */}
+        {mode === "mailbox" ? (
+          <LetterMailbox
+            letters={letters}
+            onBack={() => setMode("dashboard")}
+            onDelete={handleDeleteLetter}
+          />
+        ) : /* ── GAME MODE ── */
+        mode === "game" ? (
           <MemoryGame
             photos={photos}
             onBack={() => setMode("dashboard")}
@@ -388,6 +453,51 @@ export default function App() {
                   className="hidden"
                 />
               </label>
+            </div>
+
+            {/* Letter upload section */}
+            <div className="max-w-md mx-auto mb-8">
+              <label
+                htmlFor="letter-upload"
+                className="block w-full cursor-pointer group"
+              >
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-dashed border-amber-300 rounded-2xl p-5 text-center hover:border-red-400 hover:bg-amber-50 transition-all hover:scale-105 shadow-md">
+                  <div className="flex items-center justify-center gap-4">
+                    <div className="relative">
+                      <Mail className="size-10 text-amber-500 group-hover:text-red-500 transition-colors" />
+                      <Heart className="absolute -top-1 -right-1 size-4 text-red-400 fill-current animate-bounce" />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-lg font-handwriting text-gray-700">
+                        Gửi Thư Tay 💌
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Upload ảnh thư viết tay vào hộp thư tình
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-400 text-white rounded-full group-hover:from-red-400 group-hover:to-pink-400 transition-all">
+                      <Upload className="size-4" />
+                      <span className="font-medium text-sm">Gửi</span>
+                    </div>
+                  </div>
+                </div>
+                <input
+                  id="letter-upload"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleLetterUpload}
+                  className="hidden"
+                />
+              </label>
+              {letters.length > 0 && (
+                <button
+                  onClick={() => setMode("mailbox")}
+                  className="w-full mt-3 text-center font-handwriting text-pink-500 hover:text-red-500 text-sm transition-colors"
+                >
+                  📬 Mở hộp thư ({letters.length} lá thư)
+                </button>
+              )}
             </div>
 
             {/* Play Game CTA - shown when enough cards */}
